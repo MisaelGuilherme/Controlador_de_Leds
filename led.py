@@ -27,6 +27,7 @@ class inicio:
         self.pisca1 = False
         self.pisca2 = False
         self.pisca3 = False
+        self.pisca4 = False
 
         frame = Frame(self.janela, width=800, height=600, bg='#001333')
         frame.pack()
@@ -49,7 +50,7 @@ class inicio:
         self.led3 = Button(frame, text='Desligado', font=('arial', 15, 'bold'), command = lambda: self.acender(3), bg='red', activebackground='red', fg='white', activeforeground='white', width=10)
         self.led3.place(x=550, y=350)
 
-        self.led4 = Button(frame, text='Desligado', font=('arial', 15, 'bold'), command = self.verifica, bg='red', activebackground='red', fg='white', activeforeground='white', width=10)
+        self.led4 = Button(frame, text='Brilhar', font=('arial', 15, 'bold'), command = self.verifica, bg='red', activebackground='red', fg='white', activeforeground='white', width=10)
         self.led4.place(x=0, y=0)
 
         self.chave = False
@@ -57,9 +58,18 @@ class inicio:
         self.janela.mainloop()
 
     def acender(self, led):
+        
+        if self.pisca4 == True:
+            
+            self.pisca4 = False
+            self.chave = True
+            self.led4['text'] = 'Brilhar'
+            self.led4['bg'] = 'red'
+            self.led4['activebackground'] = 'red'
+            
 
         if led == 1 and self.pisca1 == False:
-            self.chave = True
+            
             #gpio.output(8, gpio.HIGH)
             self.pisca1 = True
             self.led1['text'] = 'Ligado'
@@ -68,7 +78,7 @@ class inicio:
             print('LIGADO')
 
         elif led == 1 and self.pisca1 == True:
-            self.chave = True         
+               
             #gpio.output(8, gpio.LOW)
             self.pisca1 = False
             self.led1['text'] = 'Desligado'
@@ -86,7 +96,7 @@ class inicio:
             print('LIGADO')
 
         elif led == 2 and self.pisca2 == True:
-            self.chave = True       
+             
             #gpio.output(12, gpio.LOW)
             self.pisca2 = False
             self.led2['text'] = 'Desligado'
@@ -95,7 +105,7 @@ class inicio:
             print('DESLIGADO')
 
         elif led == 3 and self.pisca3 == False:
-            self.chave = True
+            
             #gpio.output(18, gpio.HIGH)
             self.pisca3 = True
             self.led3['text'] = 'Ligado'
@@ -104,7 +114,7 @@ class inicio:
             print('LIGADO')
 
         elif led == 3 and self.pisca3 == True:
-            self.chave = True
+            
             #gpio.output(18, gpio.LOW)
             self.pisca3 = False
             self.led3['text'] = 'Desligado'
@@ -115,8 +125,6 @@ class inicio:
     def verifica(self):
 
         if self.pisca1 == True or self.pisca2 == True or self.pisca3 == True:
-            
-            self.chave = False
 
             self.pisca1 = False
             self.pisca2 = False
@@ -131,8 +139,15 @@ class inicio:
             self.led3['text'] = 'Desligado'
             self.led3['bg'] = 'red'
             self.led3['activebackground'] = 'red'
- 
+        
+        self.led4['text'] = 'Brilhando'
+        self.led4['bg'] = 'green'
+        self.led4['activebackground'] = 'green'
+            
         self.c = 0
+        
+        self.chave = False
+        self.pisca4 = True
 
         self.brilhar()
 
