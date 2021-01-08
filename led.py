@@ -16,7 +16,7 @@ class inicio:
 
         self.janela = Tk()
         self.janela.geometry('800x600')
-        self.janela['bg'] = '#001333'
+        self.janela['bg'] = 'white'
 
         os = system()
         if os == 'Windows':
@@ -29,28 +29,28 @@ class inicio:
         self.pisca3 = False
         self.pisca4 = False
 
-        frame = Frame(self.janela, width=800, height=600, bg='#001333')
+        frame = Frame(self.janela, width=800, height=600, bg='white')
         frame.pack()
 
-        lb1 = Label(frame, text='1º LED', font=('arial', 30, 'bold'), bg='#001333', fg='green')
+        lb1 = Label(frame, text='1º LED', font=('arial', 30, 'bold'), bg='white', fg='green')
         lb1.place(x=150, y=150)
 
         self.led1 = Button(frame, text='Desligado', font=('arial', 15, 'bold'), command = lambda: self.acender(1), bg='red', activebackground='red', fg='white', activeforeground='white', width=10)
         self.led1.place(x=150, y=350)
 
-        lb2 = Label(frame, text='2º LED', font=('arial', 30, 'bold'), bg='#001333', fg='yellow')
+        lb2 = Label(frame, text='2º LED', font=('arial', 30, 'bold'), bg='white', fg='yellow')
         lb2.place(x=350, y=150)
 
         self.led2 = Button(frame, text='Desligado', font=('arial', 15, 'bold'), command = lambda: self.acender(2), bg='red', activebackground='red', fg='white', activeforeground='white', width=10)
         self.led2.place(x=350, y=350)
 
-        lb3 = Label(frame, text='3º LED', font=('arial', 30, 'bold'), bg='#001333', fg='red')
+        lb3 = Label(frame, text='3º LED', font=('arial', 30, 'bold'), bg='white', fg='red')
         lb3.place(x=550, y=150)
 
         self.led3 = Button(frame, text='Desligado', font=('arial', 15, 'bold'), command = lambda: self.acender(3), bg='red', activebackground='red', fg='white', activeforeground='white', width=10)
         self.led3.place(x=550, y=350)
 
-        self.led4 = Button(frame, text='Brilhar', font=('arial', 15, 'bold'), command = self.verifica, bg='red', activebackground='red', fg='white', activeforeground='white', width=10)
+        self.led4 = Button(frame, text='Piscar', font=('arial', 15, 'bold'), command = self.verifica, bg='red', activebackground='red', fg='white', activeforeground='white', width=10)
         self.led4.place(x=0, y=0)
 
         self.chave = False
@@ -63,9 +63,13 @@ class inicio:
             
             self.pisca4 = False
             self.chave = True
-            self.led4['text'] = 'Brilhar'
+            self.led4['text'] = 'Piscar'
             self.led4['bg'] = 'red'
             self.led4['activebackground'] = 'red'
+            
+            #gpio.output(8, gpio.LOW)
+            #gpio.output(12, gpio.LOW)
+            #gpio.output(18, gpio.LOW)
             
 
         if led == 1 and self.pisca1 == False:
@@ -123,33 +127,49 @@ class inicio:
             print('DESLIGADO')
     
     def verifica(self):
-
-        if self.pisca1 == True or self.pisca2 == True or self.pisca3 == True:
-
+        
+        if self.pisca4 == True:
+            
+            self.led4['text'] = 'Piscar'
+            self.led4['bg'] = 'red'
+            self.led4['activebackground'] = 'red'
+            self.pisca4 = False
+            self.chave = True
+            
             self.pisca1 = False
             self.pisca2 = False
             self.pisca3 = False
+            self.pisca4 = True            
+            
+            self.brilhar()
+            
+        else:
 
             self.led1['text'] = 'Desligado'
             self.led1['bg'] = 'red'
             self.led1['activebackground'] = 'red'
+            
             self.led2['text'] = 'Desligado'
             self.led2['bg'] = 'red'
             self.led2['activebackground'] = 'red'
+            
             self.led3['text'] = 'Desligado'
             self.led3['bg'] = 'red'
             self.led3['activebackground'] = 'red'
-        
-        self.led4['text'] = 'Brilhando'
-        self.led4['bg'] = 'green'
-        self.led4['activebackground'] = 'green'
             
-        self.c = 0
-        
-        self.chave = False
-        self.pisca4 = True
+            self.led4['text'] = 'Piscando'
+            self.led4['bg'] = 'green'
+            self.led4['activebackground'] = 'green'
+            
+            #gpio.output(8, gpio.LOW)
+            #gpio.output(12, gpio.LOW)
+            #gpio.output(18, gpio.LOW)
+                
+            self.c = 0
+            
+            self.chave = False
 
-        self.brilhar()
+            self.brilhar()
 
     def brilhar(self):
         
